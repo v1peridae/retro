@@ -1,0 +1,223 @@
+.desktop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom, #3a6ea5 0%, #004e98 25%, #004e98 75%, #5b9bd5 100%);
+  background-image: url(./bg.jpg);
+  background-size: cover;
+  background-position: center;
+  font-family: "MS Sans Serif", sans-serif;
+  overflow: hidden;
+}
+
+.main-window {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 700px;
+  min-height: 400px;
+  z-index: 100;
+  border-radius: 6px;
+}
+
+.dialog-content {
+  display: flex;
+  align-items: center;
+  padding: 20px;
+  padding-top: 0;
+  gap: 20px;
+}
+
+.content-left {
+  flex: 1;
+}
+
+.content-right {
+  flex-shrink: 0;
+}
+
+.text-content p {
+  margin: 8px 0;
+  font-size: 16px;
+  color: #000;
+}
+
+.try-now {
+  font-size: 30px;
+  font-weight: bold;
+  color: #fa2222;
+  margin: 15px 0 15px 0;
+}
+
+.nav-window {
+  position: absolute;
+  top: 100px;
+  right: 50px;
+  width: 200px;
+  z-index: 99;
+}
+
+.nav-content {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+}
+
+.nav-button {
+  width: 100%;
+  text-align: left;
+  font-size: 11px;
+}
+
+.nav-button.primary {
+  font-weight: bold;
+}
+
+.windows-logo {
+  width: 180px;
+  height: 200px;
+}
+
+.help-button {
+  background: #c0c0c0;
+  border: 1px outset #c0c0c0;
+  width: 16px;
+  height: 14px;
+  font-size: 10px;
+  font-weight: bold;
+  margin-right: 2px;
+}
+
+.taskbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 30px;
+  background: linear-gradient(to bottom, #3166bb 0%, #1a4480 100%);
+  border-top: 1px solid #4a7bc8;
+  display: flex;
+  align-items: center;
+  padding: 0 4px;
+  z-index: 1000;
+  font-size: 11px;
+}
+
+.start-icon {
+  margin-left: -4px;
+}
+
+.taskbar-items {
+  flex: 1;
+  display: flex;
+  gap: 2px;
+}
+
+.taskbar-item {
+  background: linear-gradient(to bottom, #4a7bc8 0%, #2859aa 100%);
+  border: 1px outset #4a7bc8;
+  color: white;
+  padding: 2px 8px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+  min-width: 120px;
+}
+
+.taskbar-item.active {
+  border: 1px inset #4a7bc8;
+  background: linear-gradient(to bottom, #2859aa 0%, #1a4480 100%);
+}
+
+.taskbar-item.primary {
+  font-weight: bold;
+  background: linear-gradient(to bottom, #f7d358 0%, #f4b942 100%);
+  color: #333;
+  border: 1px outset #f7d358;
+}
+
+.system-tray {
+  margin-left: auto;
+  background: linear-gradient(to bottom, #4a7bc8 0%, #2859aa 100%);
+  border: 1px inset #4a7bc8;
+  color: white;
+  padding: 2px 8px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  font-size: 11px;
+}
+
+.clippy {
+  position: fixed;
+  bottom: 50px;
+  right: 40px;
+  z-index: 1001;
+}
+
+.clippy-bubble {
+  background: #ffffcc;
+  border: 1px solid #000;
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 14px;
+  margin-bottom: 8px;
+  position: relative;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.clippy-bubble::after {
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  right: 20px;
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-top: 6px solid #ffffcc;
+}
+
+.clippy-character {
+  font-size: 69px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.window {
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+}
+
+.title-bar {
+  background: linear-gradient(to bottom, #3166bb 0%, #1a4480 100%);
+  color: white;
+  font-weight: bold;
+}
+
+.title-bar-text {
+  color: white;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+button {
+  font-family: "MS Sans Serif", sans-serif;
+  font-size: 11px;
+}
+
+.window-body {
+  background: #ece9d8;
+}
+
+li {
+  font-size: 16px;
+}

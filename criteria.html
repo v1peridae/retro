@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rewind</title>
+    <link rel="stylesheet" href="https://unpkg.com/xp.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="desktop">
+        <div class="window main-window">
+            <div class="title-bar">
+                <div class="title-bar-text">Guide</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Help" class="help-button"></button>
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+            <div class="window-body">
+                <div class="dialog-content">
+                    <div class="content-left">
+                        <div class="text-content">
+                            <p>
+
+                            <h2>What counts?</h2>
+                            <ul>
+                                <li>
+                                    your app needs to work on Windows XP or if you're up for the challenge, Windows 98
+                                </li>
+                                <li>your apps code needs to be open source</li>
+                                <li>you can do whatever you want!</li>
+                            </ul>
+                            <p></p>
+                            </p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="taskbar">
+        <img src="./startbutton.png" alt="Start" class="start-icon" style="cursor:pointer;">
+        <div class="taskbar-items">
+            <a href="guide.html" class="taskbar-item" style="text-decoration:none;">Guide</a>
+            <a href="criteria.html" class="taskbar-item" style="text-decoration:none;">Submission Criteria</a>
+            <a href="https://fillout.hackclub.com" class="taskbar-item primary" target="_blank"
+                style="text-decoration:none;">Submit</a>
+        </div>
+        <div class="system-tray">
+            <span class="time">3:45 PM</span>
+        </div>
+    </div>
+
+    <div class="clippy">
+        <div class="clippy-bubble">
+            need help?<br>dm @lou
+        </div>
+        <div class="clippy-character">
+            <img src="./Clippy.webp" alt="Clippy" style="width: 69px; height: auto;">
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const closeButton = document.querySelector('button[aria-label="Close"]');
+            if (closeButton) {
+                closeButton.addEventListener('click', function () {
+                    if (window.location.pathname !== '/index.html' && !window.location.pathname.endsWith('/')) {
+                        window.location.href = 'index.html';
+                    }
+                });
+            }
+            const startBtn = document.querySelector('.start-icon');
+            if (startBtn) {
+                startBtn.addEventListener('click', function () {
+                    window.location.href = 'index.html';
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>
