@@ -11,7 +11,7 @@
 
 <body>
     <div class="desktop">
-        <div class="window main-window">
+        <div class="window main-box">
             <div class="title-bar">
                 <div class="title-bar-text">Guide</div>
                 <div class="title-bar-controls">
@@ -25,66 +25,622 @@
                 <div class="dialog-content">
                     <div class="content-left">
                         <div class="text-content">
-                            <p>
+                            <h2>Build Guide (ft. Electron)</h2>
+                            <div class="tab-container">
+                                <div class="tabs">
+                                    <button class="tab-button active" data-tab="setup">Setup</button>
+                                    <button class="tab-button" data-tab="create">Create App</button>
+                                    <button class="tab-button" data-tab="run">Run</button>
+                                </div>
 
-                            <h2>How do I build?</h2>
-                            <ul>
-                                <li>
-                                    download a windows xp image!
-                                </li>
-                                <li>write your code.......</li>
+                                <div class="tab-content">
+                                    <div class="tab-panel active" id="setup-panel">
+                                        <h3>Setup Your Environment</h3>
+                                        <p>You need to make sure you have:</p>
+                                        <ul>
+                                            <li>Node.js and npm</li>
+                                            <li>A Hackatime compatible IDE like Visual Studio Code</li>
+                                            <li>Git</li>
+                                        </ul>
 
-                            </ul>
-                            <p></p>
-                            </p>
+                                        <h4>Getting Started</h4>
+                                        <p>Follow these steps:</p>
+                                        <div class="code-block">
+                                            <pre>mkdir mijn-journal 
+cd mijn-journal
+npm init -y
+npm install electron --save-dev</pre>
+                                        </div>
+
+                                        <h4>Project Structure</h4>
+                                        <p>Your Electron project should have these files:</p>
+                                        <ul>
+                                            <li><strong>package.json</strong> - Project dependencies</li>
+                                            <li><strong>index.js</strong> - Main Electron process</li>
+                                            <li><strong>index.html</strong> - Your app's UI</li>
+                                            <li><strong>renderer.js</strong> - Renderer process</li>
+                                            <li><strong>preload.js</strong> - Security bridge between main and renderer
+                                            </li>
+                                            <li><strong>style.css</strong> - Styling</li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="tab-panel" id="create-panel">
+                                        <h3>Create Your App</h3>
+
+                                        <h4>index.html</h4>
+                                        <p style="font-size: 14px; color: #666; margin: 5px 0;">This is your app's main
+                                            interface !! The HTML page your users will see.
+                                        </p>
+                                        <div class="code-block">
+                                            <pre>&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+  &lt;head&gt;
+    &lt;link rel="stylesheet" href="style.css" /&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;title&gt;Mijn Journal&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;h1&gt;Mijn Journal&lt;/h1&gt;
+    &lt;textarea id="entry" rows="10" cols="40" placeholder="Thinking...."&gt;&lt;/textarea&gt;
+    &lt;br /&gt;
+    &lt;button onclick="saveEntry()"&gt;Save&lt;/button&gt;
+    &lt;ul id="entriesList"&gt;&lt;/ul&gt;
+
+    &lt;script src="renderer.js"&gt;&lt;/script&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</pre>
+                                        </div>
+
+                                        <h4>style.css</h4>
+                                        <p style="font-size: 14px; color: #666; margin: 5px 0;">This file helps you fix
+                                            the
+                                            looks of your app using plain old CSS!! </p>
+                                        <div class="code-block">
+                                            <pre>
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background: #f0f0f0;
+}
+
+textarea {
+  width: 100%;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+button {
+  margin-top: 10px;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+li {
+  margin: 4px 0;
+}</pre>
+                                        </div>
+
+                                        <h4>index.js</h4>
+                                        <p style="font-size: 14px; color: #666; margin: 5px 0;">Think of this as the
+                                            "backend" of your app. It's the very first thing that runs and acts as the
+                                            main process. It can do stuf like create windows, interact with your OS,
+                                            and, importantly, access the file system to save and load data. For
+                                            security. This is the only place where you should be writing code that needs
+                                            direct access to system resources please :3</p>
+
+                                        <div class="code-block">
+                                            <pre>const { app, BrowserWindow, ipcMain, Notification } = require("electron");
+                                                const path = require("path");
+                                                const fs = require("fs");
+                                                
+                                                const userDataPath = app.getPath("userData");
+                                                const entriesDir = path.join(userDataPath, "entries");
+                                                if (!fs.existsSync(entriesDir)) {
+                                                  fs.mkdirSync(entriesDir, { recursive: true });
+                                                }
+                                                
+                                                function createWindow() {
+                                                  const win = new BrowserWindow({
+                                                    width: 600,
+                                                    height: 500,
+                                                    webPreferences: {
+                                                      preload: path.join(__dirname, "preload.js"),
+                                                    },
+                                                  });
+                                                
+                                                  win.loadFile("index.html");
+                                                }
+                                                
+                                                app.whenReady().then(createWindow);
+                                                
+                                                ipcMain.handle("save-entry", async (_, content) => {
+                                                  try {
+                                                    const filename = `entry-${Date.now()}.txt`;
+                                                    fs.writeFileSync(path.join(entriesDir, filename), content, "utf-8");
+                                                    return "Entry saved successfully!";
+                                                  } catch (err) {
+                                                    console.error("Error saving entry", err);
+                                                    return "Failed to save entry";
+                                                  }
+                                                });
+                                                
+                                                ipcMain.handle("load-entries", () => {
+                                                  try {
+                                                    return fs.readdirSync(entriesDir).map((file) => fs.readFileSync(path.join(entriesDir, file), "utf-8"));
+                                                  } catch (err) {
+                                                    console.error("Error loading entries", err);
+                                                    return [];
+                                                  }
+                                                });
+                                                
+                                                ipcMain.handle("show-notification", (_, title, body) => {
+                                                  new Notification({ title, body }).show();
+                                                });
+                                                </pre>
+                                        </div>
+
+                                        <h4>preload.js</h4>
+                                        <p style="font-size: 14px; color: #666; margin: 5px 0;">This is the secure
+                                            bridge between the "backend" (index.js) and the "frontend" (renderer.js).
+                                            For
+                                            security, the code in your window (renderer.js) cannot directly access the
+                                            stuff in the backend. The preload script runs in a special, maybe
+                                            "privileged" context that allows it to talk to the main process. Here, we
+                                            use the <code>contextBridge</code> to safely expose specific functions from
+                                            the main process (like saving and loading files) to the frontend code
+                                            without exposing dangerous modules to the web content.</p>
+                                        <div class="code-block">
+                                            <pre>const { contextBridge, ipcRenderer } = require('electron');
+
+contextBridge.exposeInMainWorld('journalAPI', {
+  save: (content) => ipcRenderer.invoke('save-entry', content),
+  load: () => ipcRenderer.invoke('load-entries'),
+});</pre>
+                                        </div>
+
+                                        <h4>renderer.js</h4>
+                                        <p style="font-size: 14px; color: #666; margin: 5px 0;">This is the "frontend"
+                                            JavaScript for your app, running directly within (<code>index.html</code>).
+                                            It's responsible for everything the user sees and interacts with. It
+                                            operates in a kind of sandbox, so instead of accessing stuff directly, it
+                                            uses <code>journalAPI</code> object we safely exposed in the preload.</p>
+                                        <div class="code-block">
+                                            <pre>async function saveEntry() {
+  const entry = document.getElementById('entry').value;
+  const result = await window.journalAPI.save(entry);
+  alert(result); 
+  document.getElementById('entry').value = '';
+  loadEntries();
+}
+
+async function loadEntries() {
+  const entries = await window.journalAPI.load();
+  const list = document.getElementById('entriesList');
+  list.innerHTML = '';
+  entries.reverse().forEach(content => {
+    const li = document.createElement('li');
+    li.textContent = content.slice(0, 50) + '...';
+    list.appendChild(li);
+  });
+}
+
+window.onload = loadEntries;</pre>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-panel" id="run-panel">
+                                        <h3>Run Your App</h3>
+                                        <p>Follow these steps to get your app running:</p>
+
+                                        <h4>1. Update package.json</h4>
+                                        <p>In your <code>package.json</code>, add a <code>start</code> script to the
+                                            <code>scripts</code> object. This will be the command to run your app. If
+                                            you have other scripts like <code>test</code>, you can add this alongside
+                                            them:
+                                        </p>
+                                        <div class="code-block">
+                                            <pre>"scripts": {
+  "start": "electron ."
+}</pre>
+                                        </div>
+
+                                        <h4>2. Run the app</h4>
+                                        <p>Start your Electron app:</p>
+                                        <div class="code-block">
+                                            <pre>npm start</pre>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="taskbar">
-        <img src="./startbutton.png" alt="Start" class="start-icon" style="cursor:pointer;">
-        <div class="taskbar-items">
-            <a href="guide.html" class="taskbar-item" style="text-decoration:none;">Guide</a>
-            <a href="criteria.html" class="taskbar-item" style="text-decoration:none;">Submission Criteria</a>
-            <a href="https://fillout.hackclub.com" class="taskbar-item primary" target="_blank"
-                style="text-decoration:none;">Submit</a>
-        </div>
-        <div class="system-tray">
-            <span class="time">3:45 PM</span>
-        </div>
-    </div>
 
-    <div class="clippy">
-        <div class="clippy-bubble">
-            need help?<br>dm @lou
-        </div>
-        <div class="clippy-character">
-            <img src="./Clippy.webp" alt="Clippy" style="width: 69px; height: auto;">
-        </div>
-    </div>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const closeButton = document.querySelector('button[aria-label="Close"]');
-            if (closeButton) {
-                closeButton.addEventListener('click', function () {
-                    if (window.location.pathname !== '/index.html' && !window.location.pathname.endsWith('/')) {
+        <div class="bottom-bar">
+            <img src="./startbutton.png" alt="Start" class="start-icon" style="cursor:pointer;">
+            <div class="bar-buttons">
+                <a href="guide.html" class="bar-button" style="text-decoration:none;">Guide</a>
+                <a href="criteria.html" class="bar-button" style="text-decoration:none;">Submission Criteria</a>
+                <a href="https://fillout.hackclub.com" class="bar-button primary" target="_blank"
+                    style="text-decoration:none;">Submit</a>
+            </div>
+            <div class="system-tray">
+                <span class="time">3:45 PM</span>
+            </div>
+        </div>
+
+        <div class="clippy">
+            <div class="speech-bubble">
+                need help?<br>dm @lou
+            </div>
+            <div class="clippy-character">
+                <img src="./Clippy.webp" alt="Clippy" style="width: 69px; height: auto;">
+            </div>
+        </div>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const closeButton = document.querySelector('.main-box button[aria-label="Close"]');
+                if (closeButton) {
+                    closeButton.addEventListener('click', function () {
+                        if (window.location.pathname !== '/index.html' && !window.location.pathname.endsWith('/')) {
+                            window.location.href = 'index.html';
+                        }
+                    });
+                }
+
+                const startBtn = document.querySelector('.start-icon');
+                if (startBtn) {
+                    startBtn.addEventListener('click', function () {
                         window.location.href = 'index.html';
+                    });
+                }
+
+                const tabButtons = document.querySelectorAll('.tab-button');
+                const tabPanels = document.querySelectorAll('.tab-panel');
+
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function () {
+                        const targetTab = this.getAttribute('data-tab');
+
+                        // Remove active class from all tabs and panels
+                        tabButtons.forEach(btn => btn.classList.remove('active'));
+                        tabPanels.forEach(panel => panel.classList.remove('active'));
+
+                        // Add active class to clicked tab and corresponding panel
+                        this.classList.add('active');
+                        document.getElementById(`${targetTab}-panel`).classList.add('active');
+                    });
+                });
+
+                document.querySelectorAll('.window').forEach(initDraggableWindow);
+            });
+
+            function initDraggableWindow(theWindow) {
+                const topBar = theWindow.querySelector('.title-bar');
+                if (!topBar) return;
+
+                let isMoving = false;
+                let grabSpot = { x: 0, y: 0 };
+                let isPositioned = false;
+
+                topBar.addEventListener('mousedown', function (e) {
+                    if (e.target.closest('.title-bar-controls')) {
+                        return;
+                    }
+
+                    isMoving = true;
+
+                    if (!isPositioned) {
+                        const rect = theWindow.getBoundingClientRect();
+                        const modalParent = theWindow.closest('.step-modal');
+
+                        if (modalParent) {
+                            modalParent.style.justifyContent = 'flex-start';
+                            modalParent.style.alignItems = 'flex-start';
+                            theWindow.style.position = 'absolute';
+                        } else {
+                            theWindow.style.transform = 'none';
+                        }
+
+                        theWindow.style.left = rect.left + 'px';
+                        theWindow.style.top = rect.top + 'px';
+                        theWindow.style.height = rect.height + 'px';
+                        theWindow.style.width = rect.width + 'px';
+                        isPositioned = true;
+                    }
+
+                    const rect = theWindow.getBoundingClientRect();
+                    grabSpot.x = e.clientX - rect.left;
+                    grabSpot.y = e.clientY - rect.top;
+
+                    document.addEventListener('mousemove', moveIt);
+                    document.addEventListener('mouseup', dropIt);
+
+                    e.preventDefault();
+                });
+
+                function moveIt(e) {
+                    if (!isMoving) return;
+
+                    const newX = e.clientX - grabSpot.x;
+                    const newY = e.clientY - grabSpot.y;
+
+                    const container = theWindow.closest('.step-modal') || window;
+                    const containerWidth = container.innerWidth || container.clientWidth;
+                    const containerHeight = container.innerHeight || container.clientHeight;
+
+                    const maxX = containerWidth - theWindow.offsetWidth;
+                    const maxY = containerHeight - theWindow.offsetHeight;
+
+                    const constrainedX = Math.max(0, Math.min(newX, maxX));
+                    const constrainedY = Math.max(0, Math.min(newY, maxY));
+
+                    theWindow.style.left = constrainedX + 'px';
+                    theWindow.style.top = constrainedY + 'px';
+                }
+
+                function dropIt() {
+                    isMoving = false;
+                    document.removeEventListener('mousemove', moveIt);
+                    document.removeEventListener('mouseup', dropIt);
+                }
+
+                let isGrowing = false;
+                let whichEdge = null;
+                const resizeHandleSize = 8;
+                const styleMinWidth = parseInt(window.getComputedStyle(theWindow).minWidth) || 0;
+                const minWidth = styleMinWidth > 0 ? styleMinWidth : 300;
+                const minHeight = 150;
+                let originalMouseX, originalMouseY, originalWidth, originalHeight, originalLeft, originalTop;
+
+                theWindow.addEventListener('mousemove', function (e) {
+                    if (isGrowing || isMoving) return;
+
+                    const rect = theWindow.getBoundingClientRect();
+                    const onLeft = Math.abs(e.clientX - rect.left) < resizeHandleSize;
+                    const onRight = Math.abs(e.clientX - rect.right) < resizeHandleSize;
+                    const onTop = Math.abs(e.clientY - rect.top) < resizeHandleSize;
+                    const onBottom = Math.abs(e.clientY - rect.bottom) < resizeHandleSize;
+
+                    let newResizeEdge = null;
+                    if (onRight && onBottom) {
+                        theWindow.style.cursor = 'se-resize';
+                        newResizeEdge = 'se';
+                    } else if (onLeft && onBottom) {
+                        theWindow.style.cursor = 'sw-resize';
+                        newResizeEdge = 'sw';
+                    } else if (onRight && onTop) {
+                        theWindow.style.cursor = 'ne-resize';
+                        newResizeEdge = 'ne';
+                    } else if (onLeft && onTop) {
+                        theWindow.style.cursor = 'nw-resize';
+                        newResizeEdge = 'nw';
+                    } else if (onRight) {
+                        theWindow.style.cursor = 'e-resize';
+                        newResizeEdge = 'e';
+                    } else if (onLeft) {
+                        theWindow.style.cursor = 'w-resize';
+                        newResizeEdge = 'w';
+                    } else if (onBottom) {
+                        theWindow.style.cursor = 's-resize';
+                        newResizeEdge = 's';
+                    } else if (onTop) {
+                        theWindow.style.cursor = 'n-resize';
+                        newResizeEdge = 'n';
+                    } else {
+                        theWindow.style.cursor = 'default';
+                        if (e.target.closest('.title-bar')) {
+                            theWindow.style.cursor = 'move';
+                        }
+                    }
+                    whichEdge = newResizeEdge;
+                });
+
+                theWindow.addEventListener('mousedown', function (e) {
+                    if (whichEdge && !isMoving) {
+                        isGrowing = true;
+
+                        if (!isPositioned) {
+                            const rect = theWindow.getBoundingClientRect();
+                            const modalParent = theWindow.closest('.step-modal');
+                            if (modalParent) {
+                                modalParent.style.justifyContent = 'flex-start';
+                                modalParent.style.alignItems = 'flex-start';
+                                theWindow.style.position = 'absolute';
+                            } else {
+                                theWindow.style.transform = 'none';
+                            }
+                            theWindow.style.left = rect.left + 'px';
+                            theWindow.style.top = rect.top + 'px';
+                            theWindow.style.height = rect.height + 'px';
+                            theWindow.style.width = rect.width + 'px';
+                            isPositioned = true;
+                        }
+
+                        const rect = theWindow.getBoundingClientRect();
+                        originalMouseX = e.clientX;
+                        originalMouseY = e.clientY;
+                        originalWidth = rect.width;
+                        originalHeight = rect.height;
+                        originalLeft = rect.left;
+                        originalTop = rect.top;
+
+                        document.addEventListener('mousemove', growIt);
+                        document.addEventListener('mouseup', stopGrowing);
+                        e.preventDefault();
                     }
                 });
+
+                function growIt(e) {
+                    if (!isGrowing) return;
+
+                    let newWidth = originalWidth;
+                    let newHeight = originalHeight;
+                    let newLeft = originalLeft;
+                    let newTop = originalTop;
+
+                    const dx = e.clientX - originalMouseX;
+                    const dy = e.clientY - originalMouseY;
+
+                    if (whichEdge.includes('e')) {
+                        newWidth = originalWidth + dx;
+                    }
+                    if (whichEdge.includes('w')) {
+                        newWidth = originalWidth - dx;
+                        newLeft = originalLeft + dx;
+                    }
+                    if (whichEdge.includes('s')) {
+                        newHeight = originalHeight + dy;
+                    }
+                    if (whichEdge.includes('n')) {
+                        newHeight = originalHeight - dy;
+                        newTop = originalTop + dy;
+                    }
+
+                    if (newWidth < minWidth) {
+                        newWidth = minWidth;
+                        if (whichEdge.includes('w')) {
+                            newLeft = originalLeft + originalWidth - minWidth;
+                        }
+                    }
+                    if (newHeight < minHeight) {
+                        newHeight = minHeight;
+                        if (whichEdge.includes('n')) {
+                            newTop = originalTop + originalHeight - minHeight;
+                        }
+                    }
+
+                    theWindow.style.width = newWidth + 'px';
+                    theWindow.style.height = newHeight + 'px';
+                    theWindow.style.left = newLeft + 'px';
+                    theWindow.style.top = newTop + 'px';
+                }
+
+                function stopGrowing() {
+                    isGrowing = false;
+                    document.removeEventListener('mousemove', growIt);
+                    document.removeEventListener('mouseup', stopGrowing);
+                }
             }
-            const startBtn = document.querySelector('.start-icon');
-            if (startBtn) {
-                startBtn.addEventListener('click', function () {
-                    window.location.href = 'index.html';
-                });
+        </script>
+
+        <style>
+            .tab-container {
+                margin-top: 20px;
             }
-        });
-    </script>
+
+            .tabs {
+                display: flex;
+                border-bottom: 2px solid #808080;
+                margin-bottom: 0;
+            }
+
+            .tab-button {
+                background: #c0c0c0;
+                border: 2px outset #c0c0c0;
+                border-bottom: none;
+                padding: 8px 16px;
+                margin-right: 2px;
+                cursor: pointer;
+                font-family: 'MS Sans Serif', sans-serif;
+                font-size: 11px;
+                font-weight: normal;
+                color: #000;
+                position: relative;
+                top: 2px;
+            }
+
+            .tab-button:hover {
+                background: #d0d0d0;
+            }
+
+            .tab-button.active {
+                background: #c0c0c0;
+                border: 2px outset #c0c0c0;
+                border-bottom: 2px solid #c0c0c0;
+                top: 2px;
+                font-weight: bold;
+            }
+
+            .tab-content {
+                background: #c0c0c0;
+                border: 2px inset #c0c0c0;
+                padding: 20px;
+                min-height: 300px;
+                max-height: 350px;
+                overflow-y: auto;
+            }
+
+            .tab-panel {
+                display: none;
+            }
+
+            .tab-panel.active {
+                display: block;
+            }
+
+            .tab-panel h3 {
+                margin-top: 0;
+                color: #000080;
+                font-size: 16px;
+            }
+
+            .tab-panel h4 {
+                color: #000080;
+                margin: 20px 0 10px 0;
+                font-size: 14px;
+            }
+
+            .tab-panel p {
+                font-size: 12px;
+                line-height: 1.4;
+                margin: 10px 0;
+            }
+
+            .tab-panel ul {
+                font-size: 12px;
+                line-height: 1.4;
+                margin: 10px 0;
+                padding-left: 20px;
+            }
+
+            .tab-panel li {
+                margin: 5px 0;
+            }
+
+            .code-block {
+                background: #000;
+                color: #00ff00;
+                border: 1px inset #808080;
+                margin: 10px 0;
+                padding: 10px;
+                font-family: 'Courier New', monospace;
+            }
+
+            .code-block pre {
+                margin: 0;
+                font-family: 'Courier New', monospace;
+                font-size: 11px;
+                line-height: 1.3;
+                color: #00ff00;
+                white-space: pre-wrap;
+                word-wrap: break-word;
+            }
+        </style>
+    </div>
 </body>
 
 </html>

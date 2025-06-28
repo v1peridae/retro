@@ -11,9 +11,9 @@
 
 <body>
     <div class="desktop">
-        <div class="window main-window">
+        <div class="window main-box">
             <div class="title-bar">
-                <div class="title-bar-text">Guide</div>
+                <div class="title-bar-text">Submission Criteria</div>
                 <div class="title-bar-controls">
                     <button aria-label="Help" class="help-button"></button>
                     <button aria-label="Minimize"></button>
@@ -25,32 +25,46 @@
                 <div class="dialog-content">
                     <div class="content-left">
                         <div class="text-content">
-                            <p>
-
                             <h2>What counts?</h2>
+
                             <ul>
-                                <li>
-                                    your app needs to work on Windows XP or if you're up for the challenge, Windows 98
+                                <li><strong>Build a desktop app</strong> - Use whatever you want, as long as it has a
+                                    UI</li>
+                                <li><strong>Open source</strong> - Your code must be publicly available on GitHub (I
+                                    WANNA SEE IT HEHEHEHE)</li>
+                                <li><strong>Functional</strong> - Your app must actually work and be usable by others
                                 </li>
-                                <li>your apps code needs to be open source</li>
-                                <li>you can do whatever you want!</li>
                             </ul>
-                            <p></p>
-                            </p>
+
+                            <h3>Technical Features...needs at least 2</h3>
+                            <ul>
+                                <li>Data storage or persistence</li>
+                                <li>Networking or server communication </li>
+                                <li>Native OS hooks (notifs, keyboard shortcuts, system tray/menu bar)</li>
+                                <li>Multiple windows, tabs or advanced navigation</li>
+                                <li>Background or scheduled tasks </li>
+                                <li>I'll let anything else impressive pass --surprise me!</li>
+                            </ul>
+
+                            <h3>What doesn't count</h3>
+                            <ul>
+                                <li>WE ARE NOT DOING A CALCULATOR APP, IM SORRY... or simple static UIs</li>
+                            </ul>
+
+
                         </div>
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 
-    <div class="taskbar">
+    <div class="bottom-bar">
         <img src="./startbutton.png" alt="Start" class="start-icon" style="cursor:pointer;">
-        <div class="taskbar-items">
-            <a href="guide.html" class="taskbar-item" style="text-decoration:none;">Guide</a>
-            <a href="criteria.html" class="taskbar-item" style="text-decoration:none;">Submission Criteria</a>
-            <a href="https://fillout.hackclub.com" class="taskbar-item primary" target="_blank"
+        <div class="bar-buttons">
+            <a href="guide.html" class="bar-button" style="text-decoration:none;">Guide</a>
+            <a href="criteria.html" class="bar-button" style="text-decoration:none;">Submission Criteria</a>
+            <a href="https://fillout.hackclub.com" class="bar-button primary" target="_blank"
                 style="text-decoration:none;">Submit</a>
         </div>
         <div class="system-tray">
@@ -59,7 +73,7 @@
     </div>
 
     <div class="clippy">
-        <div class="clippy-bubble">
+        <div class="speech-bubble">
             need help?<br>dm @lou
         </div>
         <div class="clippy-character">
@@ -69,7 +83,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const closeButton = document.querySelector('button[aria-label="Close"]');
+            const closeButton = document.querySelector('.main-box button[aria-label="Close"]');
             if (closeButton) {
                 closeButton.addEventListener('click', function () {
                     if (window.location.pathname !== '/index.html' && !window.location.pathname.endsWith('/')) {
@@ -83,7 +97,182 @@
                     window.location.href = 'index.html';
                 });
             }
+            initWindowDrag();
         });
+
+        function initWindowDrag() {
+            const theWindow = document.querySelector('.main-box');
+            const topBar = theWindow.querySelector('.title-bar');
+            let isMoving = false;
+            let grabSpot = { x: 0, y: 0 };
+
+            if (!theWindow.style.left) {
+                const rect = theWindow.getBoundingClientRect();
+                theWindow.style.left = rect.left + 'px';
+                theWindow.style.top = rect.top + 'px';
+                theWindow.style.height = rect.height + 'px';
+                theWindow.style.width = rect.width + 'px';
+                theWindow.style.transform = 'none';
+            }
+
+
+            topBar.addEventListener('mousedown', function (e) {
+                if (e.target.closest('.title-bar-controls')) {
+                    return;
+                }
+
+                isMoving = true;
+                const rect = theWindow.getBoundingClientRect();
+                grabSpot.x = e.clientX - rect.left;
+                grabSpot.y = e.clientY - rect.top;
+
+                document.addEventListener('mousemove', moveIt);
+                document.addEventListener('mouseup', dropIt);
+
+                e.preventDefault();
+            });
+
+            function moveIt(e) {
+                if (!isMoving) return;
+
+                const newX = e.clientX - grabSpot.x;
+                const newY = e.clientY - grabSpot.y;
+
+                const maxX = window.innerWidth - theWindow.offsetWidth;
+                const maxY = window.innerHeight - theWindow.offsetHeight;
+
+                const constrainedX = Math.max(0, Math.min(newX, maxX));
+                const constrainedY = Math.max(0, Math.min(newY, maxY));
+
+                theWindow.style.left = constrainedX + 'px';
+                theWindow.style.top = constrainedY + 'px';
+            }
+
+            function dropIt() {
+                isMoving = false;
+                document.removeEventListener('mousemove', moveIt);
+                document.removeEventListener('mouseup', dropIt);
+            }
+
+            let isGrowing = false;
+            let whichEdge = null;
+            const resizeHandleSize = 8;
+            const minWidth = 200;
+            const minHeight = 150;
+            let originalMouseX, originalMouseY, originalWidth, originalHeight, originalLeft, originalTop;
+
+            theWindow.addEventListener('mousemove', function (e) {
+                if (isGrowing || isMoving) return;
+
+                const rect = theWindow.getBoundingClientRect();
+                const onLeft = Math.abs(e.clientX - rect.left) < resizeHandleSize;
+                const onRight = Math.abs(e.clientX - rect.right) < resizeHandleSize;
+                const onTop = Math.abs(e.clientY - rect.top) < resizeHandleSize;
+                const onBottom = Math.abs(e.clientY - rect.bottom) < resizeHandleSize;
+
+                let newResizeEdge = null;
+                if (onRight && onBottom) {
+                    theWindow.style.cursor = 'se-resize';
+                    newResizeEdge = 'se';
+                } else if (onLeft && onBottom) {
+                    theWindow.style.cursor = 'sw-resize';
+                    newResizeEdge = 'sw';
+                } else if (onRight && onTop) {
+                    theWindow.style.cursor = 'ne-resize';
+                    newResizeEdge = 'ne';
+                } else if (onLeft && onTop) {
+                    theWindow.style.cursor = 'nw-resize';
+                    newResizeEdge = 'nw';
+                } else if (onRight) {
+                    theWindow.style.cursor = 'e-resize';
+                    newResizeEdge = 'e';
+                } else if (onLeft) {
+                    theWindow.style.cursor = 'w-resize';
+                    newResizeEdge = 'w';
+                } else if (onBottom) {
+                    theWindow.style.cursor = 's-resize';
+                    newResizeEdge = 's';
+                } else if (onTop) {
+                    theWindow.style.cursor = 'n-resize';
+                    newResizeEdge = 'n';
+                } else {
+                    theWindow.style.cursor = 'default';
+                    if (e.target.closest('.title-bar')) {
+                        theWindow.style.cursor = 'move';
+                    }
+                }
+                whichEdge = newResizeEdge;
+            });
+
+            theWindow.addEventListener('mousedown', function (e) {
+                if (whichEdge && !isMoving) {
+                    isGrowing = true;
+
+                    const rect = theWindow.getBoundingClientRect();
+                    originalMouseX = e.clientX;
+                    originalMouseY = e.clientY;
+                    originalWidth = rect.width;
+                    originalHeight = rect.height;
+                    originalLeft = rect.left;
+                    originalTop = rect.top;
+
+                    document.addEventListener('mousemove', growIt);
+                    document.addEventListener('mouseup', stopGrowing);
+                    e.preventDefault();
+                }
+            });
+
+            function growIt(e) {
+                if (!isGrowing) return;
+
+                let newWidth = originalWidth;
+                let newHeight = originalHeight;
+                let newLeft = originalLeft;
+                let newTop = originalTop;
+
+                const dx = e.clientX - originalMouseX;
+                const dy = e.clientY - originalMouseY;
+
+                if (whichEdge.includes('e')) {
+                    newWidth = originalWidth + dx;
+                }
+                if (whichEdge.includes('w')) {
+                    newWidth = originalWidth - dx;
+                    newLeft = originalLeft + dx;
+                }
+                if (whichEdge.includes('s')) {
+                    newHeight = originalHeight + dy;
+                }
+                if (whichEdge.includes('n')) {
+                    newHeight = originalHeight - dy;
+                    newTop = originalTop + dy;
+                }
+
+                if (newWidth < minWidth) {
+                    newWidth = minWidth;
+                    if (whichEdge.includes('w')) {
+                        newLeft = originalLeft + originalWidth - minWidth;
+                    }
+                }
+                if (newHeight < minHeight) {
+                    newHeight = minHeight;
+                    if (whichEdge.includes('n')) {
+                        newTop = originalTop + originalHeight - minHeight;
+                    }
+                }
+
+                theWindow.style.width = newWidth + 'px';
+                theWindow.style.height = newHeight + 'px';
+                theWindow.style.left = newLeft + 'px';
+                theWindow.style.top = newTop + 'px';
+            }
+
+            function stopGrowing() {
+                isGrowing = false;
+                document.removeEventListener('mousemove', growIt);
+                document.removeEventListener('mouseup', stopGrowing);
+            }
+        }
     </script>
 </body>
 

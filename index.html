@@ -11,9 +11,9 @@
 
 <body>
     <div class="desktop">
-        <div class="window main-window">
+        <div class="window main-box">
             <div class="title-bar">
-                <div class="title-bar-text">Rewind</div>
+                <div class="title-bar-text">Rewind v1</div>
                 <div class="title-bar-controls">
                     <button aria-label="Help" class="help-button"></button>
                     <button aria-label="Minimize"></button>
@@ -26,15 +26,11 @@
                     <div class="content-left">
                         <div class="text-content">
                             <br><br>
-                            <p>Build retro software</p>
-                            <p>Get a signed Windows XP image???</p>
+                            <p>Build a desktop app...</p>
+                            <p>...get stickers, artifacts + a signed Windows XP image!</p>
                             <br>
 
-                            <p><i>Are you tired of the modern age of computers? Then you might wanna rewind! Rewind is a
-                                    YSWS where you build retro software for Windows XP. You can build anything you want,
-                                    as
-                                    long as it can run on Windows XP...so uh goodluck!</i>
-                            </p>
+
                             <br>
 
                             <h2 class="try-now">TRY NOW!!!</h2>
@@ -50,22 +46,28 @@
                             </div>
                         </div>
                     </div>
-                    <div class="content-right">
-                        <div class="windows-logo">
+                    <div class="right-stuff">
+                        <div class="xp-logo">
                             <img src="./logo.png" alt="Windows XP Logo"
-                                style="width: 180px; height: 200px; margin-top: -80px; padding-left: 20px;">
+                                style="width: 180px; height: 200px; margin-top: -10px; padding-left: 13px;">
+                        </div>
+                        <div class="date-banner">
+                            <div class="date-content">
+                                <div class="date-title">HAPPENING NOW!!</div>
+                                <div class="date-range">June 28th - July 5th</div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
 
-        <div class="taskbar">
+        <div class="bottom-bar">
             <img src="./startbutton.png" alt="Start" class="start-icon">
-            <div class="taskbar-items">
-                <a href="guide.html" class="taskbar-item" style="text-decoration:none;">Guide</a>
-                <a href="criteria.html" class="taskbar-item" style="text-decoration:none;">Submission Criteria</a>
-                <a href="https://fillout.hackclub.com" class="taskbar-item primary" target="_blank"
+            <div class="bar-buttons">
+                <a href="guide.html" class="bar-button" style="text-decoration:none;">Guide</a>
+                <a href="criteria.html" class="bar-button" style="text-decoration:none;">Submission Criteria</a>
+                <a href="https://fillout.hackclub.com" class="bar-button primary" target="_blank"
                     style="text-decoration:none;">Submit</a>
             </div>
             <div class="system-tray">
@@ -74,23 +76,266 @@
         </div>
 
         <div class="clippy">
-            <div class="clippy-bubble">
+            <div class="speech-bubble">
                 need help?<br>dm @lou
             </div>
             <div class="clippy-character">
                 <img src="./Clippy.webp" alt="Clippy" style="width: 69px; height: auto;">
             </div>
         </div>
+
+        <div id="guideNotification" class="notification-popup" style="display: none;">
+            <div class="popup-box">
+                <div class="title-bar">
+                    <div class="title-bar-text">You've got mail</div>
+                    <div class="title-bar-controls">
+                        <button aria-label="Help" class="help-button"></button>
+                        <button aria-label="Minimize"></button>
+                        <button aria-label="Maximize"></button>
+                        <button aria-label="Close" onclick="closeNotification()"></button>
+                    </div>
+                </div>
+                <div class="notification-body">
+                    <div class="notification-content">
+                        <img src="./OE1999.webp" alt="Clippy" class="popup-icon">
+                        <div class="notification-text">
+                            <strong>Need help?</strong><br>
+                            You look confused. Want to check out the guide? It'll help you get started :)
+                        </div>
+                    </div>
+                    <div class="popup-buttons">
+                        <button class="xp-button" onclick="dismissNotification()">I'm not confused</button>
+                        <button class="xp-button primary" onclick="openGuide()">Show me the guide!</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <audio id="errorSound" preload="auto">
+        <source src="Microsoft Windows XP Error - Sound Effect (HD).mp3" type="audio/mpeg">
+    </audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            const closeButton = document.querySelector('button[aria-label="Close"]');
+            const closeButton = document.querySelector('.main-box .title-bar-controls button[aria-label="Close"]');
             if (closeButton) {
                 closeButton.addEventListener('click', function () {
-
                     console.log('Close button clicked on main page - no action taken');
                 });
+            }
+
+            setTimeout(function () {
+                if (!sessionStorage.getItem('guideNotificationDismissed')) {
+                    showGuideNotification();
+                }
+            }, 2000);
+
+            if (window.innerWidth > 768) {
+                initWindowDrag();
+            }
+        });
+
+        function initWindowDrag() {
+            const theWindow = document.querySelector('.main-box');
+            const topBar = theWindow.querySelector('.title-bar');
+            let isMoving = false;
+            let grabSpot = { x: 0, y: 0 };
+
+            if (!theWindow.style.left) {
+                const rect = theWindow.getBoundingClientRect();
+                theWindow.style.left = rect.left + 'px';
+                theWindow.style.top = rect.top + 'px';
+                theWindow.style.height = rect.height + 'px';
+                theWindow.style.width = rect.width + 'px';
+                theWindow.style.transform = 'none';
+            }
+
+            topBar.addEventListener('mousedown', function (e) {
+                if (e.target.closest('.title-bar-controls')) {
+                    return;
+                }
+
+                isMoving = true;
+                const rect = theWindow.getBoundingClientRect();
+                grabSpot.x = e.clientX - rect.left;
+                grabSpot.y = e.clientY - rect.top;
+
+                document.addEventListener('mousemove', moveIt);
+                document.addEventListener('mouseup', dropIt);
+
+                e.preventDefault();
+            });
+
+            function moveIt(e) {
+                if (!isMoving) return;
+
+                const newX = e.clientX - grabSpot.x;
+                const newY = e.clientY - grabSpot.y;
+
+                const maxX = window.innerWidth - theWindow.offsetWidth;
+                const maxY = window.innerHeight - theWindow.offsetHeight;
+
+                const constrainedX = Math.max(0, Math.min(newX, maxX));
+                const constrainedY = Math.max(0, Math.min(newY, maxY));
+
+                theWindow.style.left = constrainedX + 'px';
+                theWindow.style.top = constrainedY + 'px';
+            }
+
+            function dropIt() {
+                isMoving = false;
+                document.removeEventListener('mousemove', moveIt);
+                document.removeEventListener('mouseup', dropIt);
+            }
+
+            let isGrowing = false;
+            let whichEdge = null;
+            const resizeHandleSize = 8;
+            const minWidth = 200;
+            const minHeight = 150;
+            let originalMouseX, originalMouseY, originalWidth, originalHeight, originalLeft, originalTop;
+
+            theWindow.addEventListener('mousemove', function (e) {
+                if (isGrowing || isMoving) return;
+
+                const rect = theWindow.getBoundingClientRect();
+                const onLeft = Math.abs(e.clientX - rect.left) < resizeHandleSize;
+                const onRight = Math.abs(e.clientX - rect.right) < resizeHandleSize;
+                const onTop = Math.abs(e.clientY - rect.top) < resizeHandleSize;
+                const onBottom = Math.abs(e.clientY - rect.bottom) < resizeHandleSize;
+
+                let newResizeEdge = null;
+                if (onRight && onBottom) {
+                    theWindow.style.cursor = 'se-resize';
+                    newResizeEdge = 'se';
+                } else if (onLeft && onBottom) {
+                    theWindow.style.cursor = 'sw-resize';
+                    newResizeEdge = 'sw';
+                } else if (onRight && onTop) {
+                    theWindow.style.cursor = 'ne-resize';
+                    newResizeEdge = 'ne';
+                } else if (onLeft && onTop) {
+                    theWindow.style.cursor = 'nw-resize';
+                    newResizeEdge = 'nw';
+                } else if (onRight) {
+                    theWindow.style.cursor = 'e-resize';
+                    newResizeEdge = 'e';
+                } else if (onLeft) {
+                    theWindow.style.cursor = 'w-resize';
+                    newResizeEdge = 'w';
+                } else if (onBottom) {
+                    theWindow.style.cursor = 's-resize';
+                    newResizeEdge = 's';
+                } else if (onTop) {
+                    theWindow.style.cursor = 'n-resize';
+                    newResizeEdge = 'n';
+                } else {
+                    theWindow.style.cursor = 'default';
+                    if (e.target.closest('.title-bar')) {
+                        theWindow.style.cursor = 'move';
+                    }
+                }
+                whichEdge = newResizeEdge;
+            });
+
+            theWindow.addEventListener('mousedown', function (e) {
+                if (whichEdge && !isMoving) {
+                    isGrowing = true;
+
+                    const rect = theWindow.getBoundingClientRect();
+                    originalMouseX = e.clientX;
+                    originalMouseY = e.clientY;
+                    originalWidth = rect.width;
+                    originalHeight = rect.height;
+                    originalLeft = rect.left;
+                    originalTop = rect.top;
+
+                    document.addEventListener('mousemove', growIt);
+                    document.addEventListener('mouseup', stopGrowing);
+                    e.preventDefault();
+                }
+            });
+
+            function growIt(e) {
+                if (!isGrowing) return;
+
+                let newWidth = originalWidth;
+                let newHeight = originalHeight;
+                let newLeft = originalLeft;
+                let newTop = originalTop;
+
+                const dx = e.clientX - originalMouseX;
+                const dy = e.clientY - originalMouseY;
+
+                if (whichEdge.includes('e')) {
+                    newWidth = originalWidth + dx;
+                }
+                if (whichEdge.includes('w')) {
+                    newWidth = originalWidth - dx;
+                    newLeft = originalLeft + dx;
+                }
+                if (whichEdge.includes('s')) {
+                    newHeight = originalHeight + dy;
+                }
+                if (whichEdge.includes('n')) {
+                    newHeight = originalHeight - dy;
+                    newTop = originalTop + dy;
+                }
+
+                if (newWidth < minWidth) {
+                    newWidth = minWidth;
+                    if (whichEdge.includes('w')) {
+                        newLeft = originalLeft + originalWidth - minWidth;
+                    }
+                }
+                if (newHeight < minHeight) {
+                    newHeight = minHeight;
+                    if (whichEdge.includes('n')) {
+                        newTop = originalTop + originalHeight - minHeight;
+                    }
+                }
+
+                theWindow.style.width = newWidth + 'px';
+                theWindow.style.height = newHeight + 'px';
+                theWindow.style.left = newLeft + 'px';
+                theWindow.style.top = newTop + 'px';
+            }
+
+            function stopGrowing() {
+                isGrowing = false;
+                document.removeEventListener('mousemove', growIt);
+                document.removeEventListener('mouseup', stopGrowing);
+            }
+        }
+
+        function showGuideNotification() {
+            const notification = document.getElementById('guideNotification');
+            notification.style.display = 'flex';
+
+            const errorSound = document.getElementById('errorSound');
+            errorSound.currentTime = 0;
+            errorSound.play().catch(e => console.log('Audio play failed:', e));
+        }
+
+        function closeNotification() {
+            const notification = document.getElementById('guideNotification');
+            notification.style.display = 'none';
+            sessionStorage.setItem('guideNotificationDismissed', 'true');
+        }
+
+        function dismissNotification() {
+            closeNotification();
+        }
+
+        function openGuide() {
+            sessionStorage.setItem('guideNotificationDismissed', 'true');
+            window.location.href = 'guide.html';
+        }
+
+        document.getElementById('guideNotification').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeNotification();
             }
         });
     </script>
