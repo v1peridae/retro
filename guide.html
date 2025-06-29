@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Rewind</title>
+    <link rel="icon" type="image/png" href="rewindlogo2.png">
     <link rel="stylesheet" href="https://unpkg.com/xp.css">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -31,6 +32,7 @@
                                     <button class="tab-button active" data-tab="setup">Setup</button>
                                     <button class="tab-button" data-tab="create">Create App</button>
                                     <button class="tab-button" data-tab="run">Run</button>
+                                    <button class="tab-button" data-tab="build">Build & Distribute</button>
                                 </div>
 
                                 <div class="tab-content">
@@ -76,17 +78,20 @@ npm install electron --save-dev</pre>
                                             <pre>&lt;!DOCTYPE html&gt;
 &lt;html&gt;
   &lt;head&gt;
-    &lt;link rel="stylesheet" href="style.css" /&gt;
     &lt;meta charset="UTF-8" /&gt;
     &lt;title&gt;Mijn Journal&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css" /&gt;
   &lt;/head&gt;
   &lt;body&gt;
-    &lt;h1&gt;Mijn Journal&lt;/h1&gt;
-    &lt;textarea id="entry" rows="10" cols="40" placeholder="Thinking...."&gt;&lt;/textarea&gt;
-    &lt;br /&gt;
-    &lt;button onclick="saveEntry()"&gt;Save&lt;/button&gt;
-    &lt;ul id="entriesList"&gt;&lt;/ul&gt;
-
+    &lt;div class="window"&gt;
+        &lt;div class="title-bar"&gt;
+            &lt;div class="title-bar-text"&gt;Mijn Journal&lt;/div&gt;
+        &lt;/div&gt;
+        &lt;textarea id="entry" placeholder="Thinking...."&gt;&lt;/textarea&gt;
+        &lt;br /&gt;
+        &lt;button onclick="saveEntry()"&gt;Save Entry&lt;/button&gt;
+        &lt;ul id="entriesList"&gt;&lt;/ul&gt;
+    &lt;/div&gt;
     &lt;script src="renderer.js"&gt;&lt;/script&gt;
   &lt;/body&gt;
 &lt;/html&gt;</pre>
@@ -98,34 +103,116 @@ npm install electron --save-dev</pre>
                                             looks of your app using plain old CSS!! </p>
                                         <div class="code-block">
                                             <pre>
+@font-face {
+  font-family: "Pixelated MS Sans Serif";
+  src: url("https://unpkg.com/pixelated-ms-sans-serif/build/pixelated-ms-sans-serif.woff2") format("woff2");
+  src: url("https://unpkg.com/pixelated-ms-sans-serif/build/pixelated-ms-sans-serif.woff") format("woff");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Pixelated MS Sans Serif", "Tahoma", sans-serif;
+  font-size: 16px;
   margin: 0;
-  padding: 20px;
-  background: #f0f0f0;
+  padding: 0;
+  background: #008080;
+  color: #000;
+}
+
+.window {
+  margin: 30px;
+  background: #c0c0c0; 
+  border: 2px solid;
+  border-top-color: #fff;
+  border-left-color: #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  padding: 10px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
+}
+
+.title-bar {
+  background: #000080; 
+  color: #fff;
+  padding: 3px 5px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.title-bar-text {
+  padding-left: 5px;
+}
+
+.title-bar-controls button {
+  background: #c0c0c0;
+  border: 1px solid;
+  border-top-color: #fff;
+  border-left-color: #fff;
+  border-right-color: #808080;
+  border-bottom-color: #808080;
+  font-family: "Marlett", "Arial", sans-serif; 
+  padding: 0;
+  margin: 0 1px;
+  width: 16px;
+  height: 14px;
+  min-width: 0;
 }
 
 textarea {
-  width: 100%;
+  width: calc(100% - 10px);
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: 2px inset #808080;
   resize: vertical;
+  background: #fff;
+  padding: 3px;
+  margin-top: 10px;
+  min-height: 100px;
 }
 
 button {
   margin-top: 10px;
   padding: 6px 12px;
   cursor: pointer;
+  background: #c0c0c0;
+  border: 1px outset #fff;
+  border-right-color: #000;
+  border-bottom-color: #000;
+  box-shadow: 1px 1px 0px #808080;
+  font-family: inherit;
+}
+
+button:active {
+  border-style: inset;
+  box-shadow: none;
 }
 
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 10px 0 0 0;
+  border: 2px inset #808080;
+  background: #fff;
+  padding: 5px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 li {
   margin: 4px 0;
-}</pre>
+  padding: 5px;
+  border: 1px dotted #ccc;
+  cursor: pointer;
+}
+
+li:hover {
+  background: #000080;
+  color: #fff;
+}
+</pre>
                                         </div>
 
                                         <h4>index.js</h4>
@@ -138,53 +225,73 @@ li {
 
                                         <div class="code-block">
                                             <pre>const { app, BrowserWindow, ipcMain, Notification } = require("electron");
-                                                const path = require("path");
-                                                const fs = require("fs");
-                                                
-                                                const userDataPath = app.getPath("userData");
-                                                const entriesDir = path.join(userDataPath, "entries");
-                                                if (!fs.existsSync(entriesDir)) {
-                                                  fs.mkdirSync(entriesDir, { recursive: true });
-                                                }
-                                                
-                                                function createWindow() {
-                                                  const win = new BrowserWindow({
-                                                    width: 600,
-                                                    height: 500,
-                                                    webPreferences: {
-                                                      preload: path.join(__dirname, "preload.js"),
-                                                    },
-                                                  });
-                                                
-                                                  win.loadFile("index.html");
-                                                }
-                                                
-                                                app.whenReady().then(createWindow);
-                                                
-                                                ipcMain.handle("save-entry", async (_, content) => {
-                                                  try {
-                                                    const filename = `entry-${Date.now()}.txt`;
-                                                    fs.writeFileSync(path.join(entriesDir, filename), content, "utf-8");
-                                                    return "Entry saved successfully!";
-                                                  } catch (err) {
-                                                    console.error("Error saving entry", err);
-                                                    return "Failed to save entry";
-                                                  }
-                                                });
-                                                
-                                                ipcMain.handle("load-entries", () => {
-                                                  try {
-                                                    return fs.readdirSync(entriesDir).map((file) => fs.readFileSync(path.join(entriesDir, file), "utf-8"));
-                                                  } catch (err) {
-                                                    console.error("Error loading entries", err);
-                                                    return [];
-                                                  }
-                                                });
-                                                
-                                                ipcMain.handle("show-notification", (_, title, body) => {
-                                                  new Notification({ title, body }).show();
-                                                });
-                                                </pre>
+const path = require("path");
+const fs = require("fs");
+
+let entriesDir;
+
+function createWindow() {
+  const win = new BrowserWindow({
+    width: 600,
+    height: 500,
+    webPreferences: {
+      preload: path.join(__dirname, "preload.js"),
+    },
+  });
+
+  win.loadFile("index.html");
+}
+
+app.whenReady().then(() => {
+  const userDataPath = app.getPath("userData");
+  entriesDir = path.join(userDataPath, "entries");
+  if (!fs.existsSync(entriesDir)) {
+    fs.mkdirSync(entriesDir, { recursive: true });
+  }
+
+  createWindow();
+});
+
+ipcMain.handle("save-entry", async (_, content) => {
+  try {
+    const filename = `entry-${Date.now()}.txt`;
+    fs.writeFileSync(path.join(entriesDir, filename), content, "utf-8");
+    return "Entry saved successfully!";
+  } catch (err) {
+    console.error("Error saving entry", err);
+    return "Failed to save entry";
+  }
+});
+
+ipcMain.handle("load-entries", () => {
+  try {
+    return fs.readdirSync(entriesDir).map((file) => fs.readFileSync(path.join(entriesDir, file), "utf-8"));
+  } catch (err) {
+    console.error("Error loading entries", err);
+    return [];
+  }
+});
+
+ipcMain.on("open-entry-window", (event, content) => {
+    const entryWin = new BrowserWindow({
+        width: 400,
+        height: 400,
+        title: "Journal Entry",
+        parent: BrowserWindow.getFocusedWindow(),
+        modal: true,
+    });
+    const htmlContent = `
+        &lt;!DOCTYPE html&gt;
+        &lt;html&gt;&lt;head&gt;&lt;title&gt;Entry&lt;/title&gt;&lt;style&gt;body{font-family:sans-serif;padding:20px;white-space:pre-wrap;}&lt;/style&gt;&lt;/head&gt;
+        &lt;body&gt;${content.replace(/</g, "&lt;").replace(/>/g, "&gt;")}&lt;/body&gt;
+        &lt;/html&gt;`;
+    entryWin.loadURL("data:text/html;charset=utf-8," + encodeURIComponent(htmlContent));
+});
+
+ipcMain.handle("show-notification", (_, title, body) => {
+  new Notification({ title, body }).show();
+});
+</pre>
                                         </div>
 
                                         <h4>preload.js</h4>
@@ -203,6 +310,7 @@ li {
 contextBridge.exposeInMainWorld('journalAPI', {
   save: (content) => ipcRenderer.invoke('save-entry', content),
   load: () => ipcRenderer.invoke('load-entries'),
+  openEntry: (content) => ipcRenderer.send("open-entry-window", content),
 });</pre>
                                         </div>
 
@@ -213,26 +321,44 @@ contextBridge.exposeInMainWorld('journalAPI', {
                                             operates in a kind of sandbox, so instead of accessing stuff directly, it
                                             uses <code>journalAPI</code> object we safely exposed in the preload.</p>
                                         <div class="code-block">
-                                            <pre>async function saveEntry() {
-  const entry = document.getElementById('entry').value;
+                                            <pre>
+const sillyQuotes = ["gurt: yo", "six seven", "empl*yment"];
+
+async function saveEntry() {
+  const entry = document.getElementById("entry").value;
+  if (!entry.trim()) {
+    alert("Cannot save an empty entry!");
+    return;
+  }
   const result = await window.journalAPI.save(entry);
-  alert(result); 
-  document.getElementById('entry').value = '';
+
+  const randomQuote = sillyQuotes[Math.floor(Math.random() * sillyQuotes.length)];
+  new Notification("Entry Saved!", { body: randomQuote });
+
+  document.getElementById("entry").value = "";
   loadEntries();
 }
 
 async function loadEntries() {
   const entries = await window.journalAPI.load();
-  const list = document.getElementById('entriesList');
-  list.innerHTML = '';
-  entries.reverse().forEach(content => {
-    const li = document.createElement('li');
-    li.textContent = content.slice(0, 50) + '...';
+  const list = document.getElementById("entriesList");
+  list.innerHTML = "";
+  entries.reverse().forEach((content) => {
+    const li = document.createElement("li");
+    li.textContent = content.slice(0, 50) + (content.length > 50 ? "..." : "");
+    li.dataset.fullEntry = content;
+    li.addEventListener("click", () => {
+      window.journalAPI.openEntry(li.dataset.fullEntry);
+    });
     list.appendChild(li);
   });
 }
 
-window.onload = loadEntries;</pre>
+window.onload = () => {
+  Notification.requestPermission();
+  loadEntries();
+};
+</pre>
                                         </div>
                                     </div>
 
@@ -257,6 +383,112 @@ window.onload = loadEntries;</pre>
                                         <div class="code-block">
                                             <pre>npm start</pre>
                                         </div>
+                                    </div>
+
+                                    <div class="tab-panel" id="build-panel">
+                                        <h3>Build & Distribute Your App</h3>
+                                        <p>Ready to share your app with the world? Let's package it into an executable!
+                                        </p>
+
+                                        <h4>1. Install electron-builder</h4>
+                                        <p>This tool helps you package your Electron app into platform-specific
+                                            distributables (like .exe for Windows, .dmg for Mac, etc.):</p>
+                                        <div class="code-block">
+                                            <pre>npm install electron-builder --save-dev</pre>
+                                        </div>
+
+                                        <h4>2. Update your package.json</h4>
+                                        <p>Add build configuration and scripts to your <code>package.json</code>. Add
+                                            these sections:</p>
+                                        <div class="code-block">
+                                            <pre>"main": "index.js",
+"scripts": {
+  "start": "electron .",
+  "build": "electron-builder",
+  "build-win": "electron-builder --win",
+  "build-mac": "electron-builder --mac",
+  "build-linux": "electron-builder --linux"
+},
+"build": {
+  "appId": "com.yourname.mijn-journal",
+  "productName": "Mijn Journal",
+  "directories": {
+    "output": "dist"
+  },
+  "files": [
+    "index.js",
+    "index.html",
+    "renderer.js", 
+    "preload.js",
+    "style.css",
+    "package.json"
+  ],
+  "win": {
+    "target": "nsis",
+    "icon": "icon.ico"
+  },
+  "mac": {
+    "target": "dmg",
+    "icon": "icon.icns"
+  },
+  "linux": {
+    "target": "AppImage",
+    "icon": "icon.png"
+  }
+}</pre>
+                                        </div>
+
+                                        <h4>3. Add an Icon (Optional)</h4>
+                                        <p>Create icons for your app:</p>
+                                        <ul>
+                                            <li><strong>Windows:</strong> icon.ico (256x256px)</li>
+                                            <li><strong>Mac:</strong> icon.icns (512x512px)</li>
+                                            <li><strong>Linux:</strong> icon.png (512x512px)</li>
+                                        </ul>
+                                        <p>Place these in your project root directory.</p>
+
+                                        <h4>4. Build Your App</h4>
+                                        <p>Create executables for your platform:</p>
+                                        <div class="code-block">
+                                            <pre># Build for your current platform
+npm run build
+
+# Build specifically for Windows
+npm run build-win
+
+# Build specifically for Mac  
+npm run build-mac
+
+# Build specifically for Linux
+npm run build-linux</pre>
+                                        </div>
+
+                                        <p><strong>Windows Tip:</strong> If your build fails with an error about "A
+                                            required privilege is not held by the client" or "Cannot create symbolic
+                                            link", it's because Windows needs administrator rights to do this. You
+                                            can run your terminal as an Administrator for the build.</p>
+
+                                        <h4>5. Find Your Built App</h4>
+                                        <p>After building, you'll find your executables in the <code>dist/</code>
+                                            folder:</p>
+                                        <ul>
+                                            <li><strong>Windows:</strong> .exe installer and unpacked folder</li>
+                                            <li><strong>Mac:</strong> .dmg file</li>
+                                            <li><strong>Linux:</strong> .AppImage file</li>
+                                        </ul>
+
+                                        <h4>6. Upload to GitHub</h4>
+                                        <p>Share your app with others:</p>
+                                        <ol>
+                                            <li>Push your code to GitHub</li>
+                                            <li>Go to your repo → Releases → Create a new release</li>
+                                            <li>Upload the built files from <code>dist/</code> as release assets</li>
+                                            <li>Write release notes explaining what your app does</li>
+                                            <li>Publish the release!</li>
+                                        </ol>
+                                        <p style="font-size: 14px; color: #666; margin: 5px 0;">Pro tip: You can also
+                                            set up GitHub Actions to automatically build your app when you push code!
+                                            Check out electron-builder's CI documentation for more info.</p>
                                     </div>
                                 </div>
                             </div>
@@ -317,11 +549,9 @@ window.onload = loadEntries;</pre>
                     button.addEventListener('click', function () {
                         const targetTab = this.getAttribute('data-tab');
 
-                        // Remove active class from all tabs and panels
                         tabButtons.forEach(btn => btn.classList.remove('active'));
                         tabPanels.forEach(panel => panel.classList.remove('active'));
 
-                        // Add active class to clicked tab and corresponding panel
                         this.classList.add('active');
                         document.getElementById(`${targetTab}-panel`).classList.add('active');
                     });
