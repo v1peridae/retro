@@ -438,16 +438,9 @@ window.onload = () => {
 }</pre>
                                         </div>
 
-                                        <h4>3. Add an Icon (Optional)</h4>
-                                        <p>Create icons for your app:</p>
-                                        <ul>
-                                            <li><strong>Windows:</strong> icon.ico (256x256px)</li>
-                                            <li><strong>Mac:</strong> icon.icns (512x512px)</li>
-                                            <li><strong>Linux:</strong> icon.png (512x512px)</li>
-                                        </ul>
-                                        <p>Place these in your project root directory.</p>
 
-                                        <h4>4. Build Your App</h4>
+
+                                        <h4>3. Build Your App</h4>
                                         <p>Create executables for your platform:</p>
                                         <div class="code-block">
                                             <pre># Build for your current platform
@@ -463,10 +456,10 @@ npm run build-mac
 npm run build-linux</pre>
                                         </div>
 
-                                        <p><strong>Windows Tip:</strong> If your build fails with an error about "A
+                                        <p><strong>Windows Tip:</strong> If your build fails with an error like "A
                                             required privilege is not held by the client" or "Cannot create symbolic
                                             link", it's because Windows needs administrator rights to do this. You
-                                            can run your terminal as an Administrator for the build.</p>
+                                            can run your terminal as an Administrator and try again.</p>
 
                                         <h4>5. Find Your Built App</h4>
                                         <p>After building, you'll find your executables in the <code>dist/</code>
@@ -478,7 +471,6 @@ npm run build-linux</pre>
                                         </ul>
 
                                         <h4>6. Upload to GitHub</h4>
-                                        <p>Share your app with others:</p>
                                         <ol>
                                             <li>Push your code to GitHub</li>
                                             <li>Go to your repo → Releases → Create a new release</li>
@@ -486,9 +478,6 @@ npm run build-linux</pre>
                                             <li>Write release notes explaining what your app does</li>
                                             <li>Publish the release!</li>
                                         </ol>
-                                        <p style="font-size: 14px; color: #666; margin: 5px 0;">Pro tip: You can also
-                                            set up GitHub Actions to automatically build your app when you push code!
-                                            Check out electron-builder's CI documentation for more info.</p>
                                     </div>
                                 </div>
                             </div>
