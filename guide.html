@@ -514,6 +514,18 @@ npm run build-linux</pre>
         </div>
 
         <script>
+            function showTime() {
+                const now = new Date();
+                const localTime = now.toLocaleTimeString("en-US", {
+                hour: "2-digit",
+                minute: "2-digit",
+                hour12: true,
+                });
+                document.getElementById("time").textContent = localTime;
+            }
+            showTime()
+            setInterval(showTime, 30000);
+
             document.addEventListener('DOMContentLoaded', function () {
                 const closeButton = document.querySelector('.main-box button[aria-label="Close"]');
                 if (closeButton) {
