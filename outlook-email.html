@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outlook Express - You've Got Mail!</title>
+    <link rel="stylesheet" href="https://unpkg.com/xp.css">
+    <style>
+        body {
+            margin: 0;
+            background-image: url('bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            padding: 40px 40px 60px 40px;
+        }
+
+        .desktop {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            min-height: calc(100vh - 80px);
+        }
+
+        .email-window {
+            max-width: 800px;
+            margin: 50px auto;
+            position: relative;
+            border: none !important;
+            box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .toolbar {
+            background-color: #ece9d8;
+            border-bottom: 1px solid #a0a0a0;
+            padding: 4px 8px;
+            display: flex;
+            gap: 4px;
+        }
+
+        .email-headers {
+            background-color: #f0f0f0;
+            border-bottom: 1px solid #a0a0a0;
+            padding: 8px 12px;
+            font-size: 11px;
+        }
+
+        .header-row {
+            margin-bottom: 2px;
+        }
+
+        .header-label {
+            font-weight: bold;
+            color: #000080;
+            display: inline-block;
+            width: 60px;
+        }
+
+        .email-content {
+            padding: 16px;
+            background-color: white;
+            font-size: 12px;
+            line-height: 1.4;
+            border: none;
+        }
+
+        .highlight-red {
+            color: #d60000;
+        }
+
+        .highlight-blue {
+            color: #000080;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .attachment {
+            background-color: #fff2cc;
+            border: 1px solid #d6b656;
+            padding: 6px 8px;
+            margin: 12px 0;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 11px;
+        }
+
+        .email-signature {
+            margin-top: 20px;
+            font-size: 11px;
+        }
+
+        .taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30px;
+            background: linear-gradient(to bottom, #245cdb 0%, #1941a5 100%);
+            border-top: 1px solid #4a90e2;
+            display: flex;
+            align-items: center;
+            padding: 0 4px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+
+        .start-button {
+            background: linear-gradient(to bottom, #73d216 0%, #4e9a06 100%);
+            border: 1px outset #4e9a06;
+            color: white;
+            padding: 4px 12px;
+            font-size: 11px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 3px;
+            margin-right: 8px;
+        }
+
+        .start-button:hover {
+            background: linear-gradient(to bottom, #8ae234 0%, #5c9b08 100%);
+        }
+
+        .taskbar-button {
+            background: linear-gradient(to bottom, #316ac5 0%, #1d4f99 100%);
+            border: 1px outset #316ac5;
+            color: white;
+            padding: 4px 8px;
+            font-size: 10px;
+            cursor: pointer;
+            margin-right: 2px;
+            min-width: 160px;
+            text-align: left;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .taskbar-button.active {
+            background: linear-gradient(to bottom, #4a90e2 0%, #2e5bb8 100%);
+            border: 1px inset #316ac5;
+        }
+
+        .system-tray {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: white;
+            font-size: 10px;
+        }
+
+        .clock {
+            background: linear-gradient(to bottom, #316ac5 0%, #1d4f99 100%);
+            border: 1px inset #316ac5;
+            padding: 2px 8px;
+            font-size: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="desktop">
+        <div class="window email-window">
+            <div class="title-bar">
+                <div class="title-bar-text">📧 Outlook Express - You've Got Mail!</div>
+                <div class="title-bar-controls">
+                    <button aria-label="Minimize"></button>
+                    <button aria-label="Maximize"></button>
+                    <button aria-label="Close"></button>
+                </div>
+            </div>
+
+            <div class="toolbar">
+                <button>Reply</button>
+                <button>Reply All</button>
+                <button>Forward</button>
+                <button>Print</button>
+                <button>Delete</button>
+            </div>
+
+            <div class="email-headers">
+                <div class="header-row">
+                    <span class="header-label">From:</span>
+                    Lou &lt;louisa@hackclub.com&gt;
+                </div>
+                <div class="header-row">
+                    <span class="header-label">To:</span>
+                    You!
+                </div>
+                <div class="header-row">
+                    <span class="header-label">Subject:</span>
+                    REWIND V1 - Build Your Own Desktop App!
+                </div>
+                <div class="header-row">
+                    <span class="header-label">Date:</span>
+                    June 28, 2024 3:45 PM
+                </div>
+            </div>
+
+            <div class="window-body email-content">
+                <p>Hi, I'm <strong>Lou</strong>, a 17-year-old from Nairobi & over the past week I've been working on
+                    something super cool: <strong>REWIND</strong>!</p>
+
+                <p><strong>This is first iteration of Rewind and it's a YSWS where you build your own desktop
+                        app.</strong>
+                </p>
+
+                <p>Doesn't matter if you've never worked on a desktop app before because Rewind is beginner-friendly and
+                    fun
+                    (or I'm just biased). You'll build a desktop app that actually runs on your computer and you'll get
+                    to
+                    customise it however you want!</p>
+
+                <p class="highlight-red">When you complete this you can receive awesome stickers and a framed Windows XP
+                    image</p>
+
+                <p class="highlight-blue">HOW TO JOIN</p>
+
+                <p>1. Go to <a href="#">rewind.hackclub.com</a></p>
+
+                <p>2. Follow the guide to build your app</p>
+
+                <p>3. Ship it before <strong>July 6th at 11:59pm ET</strong> to get your rewards!</p>
+
+                <div class="attachment">
+                    <span>📎</span>
+                    <strong>Attachment:</strong> totally-not-a-virus.exe
+                </div>
+
+                <div class="email-signature">
+                    <p>If you have any questions, drop them in <strong>#rewind</strong> or DM me &lt;3. I'm so excited
+                        to
+                        see your cool, cursed and everything in-between projects!</p>
+                </div>
+            </div>
+
+            <div class="status-bar">
+                <p class="status-bar-field">Press F1 for help</p>
+                <p class="status-bar-field">Ready</p>
+            </div>
+        </div>
+
+    </div>
+</body>
+
+</html>
