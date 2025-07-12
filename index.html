@@ -4,345 +4,299 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rewind</title>
-    <link rel="icon" type="image/png" href="rewindlogo2.png">
+    <title>Rewind V2</title>
+    <link rel="icon" type="image/png" href="images/rewindlogo2.png">
     <link rel="stylesheet" href="https://unpkg.com/xp.css">
     <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
-    <div class="desktop">
-        <div class="window main-box">
+    <div class="ie-browser">
+        <div class="ie-window window">
             <div class="title-bar">
-                <div class="title-bar-text">Rewind v1</div>
+                <div class="title-bar-text">
+                    <img src="images/logo.png" alt="IE" class="ie-icon">
+                    Rewind V2
+                </div>
                 <div class="title-bar-controls">
-                    <button aria-label="Help" class="help-button"></button>
+                    <button aria-label="Help"></button>
                     <button aria-label="Minimize"></button>
                     <button aria-label="Maximize"></button>
                     <button aria-label="Close"></button>
                 </div>
             </div>
-            <div class="window-body">
-                <div class="dialog-content">
-                    <div class="content-left">
-                        <div class="text-content">
-                            <br><br>
-                            <p>Build a desktop app...</p>
-                            <p>...get stickers, artifacts + a framed Windows XP image!</p>
-                            <br>
 
+            <div class="ie-menu-bar">
+                <span class="ie-menu-item"><u>F</u>ile</span>
+                <span class="ie-menu-item"><u>E</u>dit</span>
+                <span class="ie-menu-item"><u>V</u>iew</span>
+                <span class="ie-menu-item">F<u>a</u>vorites</span>
+                <span class="ie-menu-item"><u>T</u>ools</span>
+                <span class="ie-menu-item"><u>H</u>elp</span>
+            </div>
 
-                            <br>
+            <div class="ie-toolbar">
+                <div class="ie-toolbar-section">
+                    <button class="ie-toolbar-btn" title="Back">
+                        <span class="btn-icon"><img src="images/Explorer Delete.png" alt="Back" class="btn-icon"></span>
+                        <span class="btn-text">Back</span>
+                    </button>
 
-                            <h2 class="try-now">TRY NOW!!!</h2>
-                            <br>
+                    <button class="ie-toolbar-btn" title="Stop">
+                        <span class="btn-icon"><img src="images/IE Stop.png" alt="Stop" class="btn-icon"></span>
+                        <span class="btn-text">Stop</span>
+                    </button>
+                    <button class="ie-toolbar-btn" title="Refresh">
+                        <span class="btn-icon"><img src="images/IE Refresh.png" alt="Refresh" class="btn-icon"></span>
+                        <span class="btn-text">Refresh</span>
+                    </button>
+                    <button class="ie-toolbar-btn" title="Home">
+                        <span class="btn-icon"><img src="images/IE Home.png" alt="Home" class="btn-icon"></span>
+                        <span class="btn-text">Home</span>
+                    </button>
+                </div>
+                <div class="ie-toolbar-divider"></div>
+                <div class="ie-toolbar-section">
+                    <button class="ie-toolbar-btn" title="Search">
+                        <span class="btn-icon"><img src="images/Search.png" alt="Search" class="btn-icon"></span>
+                        <span class="btn-text">Search</span>
+                    </button>
+                    <button class="ie-toolbar-btn" title="Favorites">
+                        <span class="btn-icon"><img src="images/Favorites.png" alt="Favorites" class="btn-icon"></span>
+                        <span class="btn-text">Favorites</span>
+                    </button>
+                    <button class="ie-toolbar-btn" title="Media">
+                        <span class="btn-icon"><img src="images/IE Media.png" alt="Media" class="btn-icon"></span>
+                        <span class="btn-text">Media</span>
+                    </button>
+                    <button class="ie-toolbar-btn" title="History">
+                        <span class="btn-icon"><img src="images/IE History.png" alt="History" class="btn-icon"></span>
+                        <span class="btn-text">History</span>
+                    </button>
+                    <button class="ie-toolbar-btn" title="Mail">
+                        <span class="btn-icon"><img src="images/Email.png" alt="Mail" class="btn-icon"></span>
+                        <span class="btn-text">Mail</span>
+                    </button>
+                    <button class="ie-toolbar-btn" title="Print">
+                        <span class="btn-icon"><img src="images/Printer.png" alt="Print" class="btn-icon"></span>
+                        <span class="btn-text">Print</span>
+                    </button>
+                </div>
+            </div>
 
-                            <div>
-                                <p>Don't know what to build yet?
-                                    <a href="guide.html">Check out the guide</a>
-                                </p>
-                                <p>Done building? <a href="https://forms.hackclub.com/t/ns4DVyS26Fus"
-                                        target="_blank">Submit your app</a></p>
-                                <p>Wanna know if your project counts? <a href="criteria.html">Check out the criteria</a>
-                                </p>
+            <div class="ie-address-bar">
+                <span class="address-label">Address</span>
+                <div class="address-input-container">
+                    <input type="text" class="address-input" value="http://rewind.hackclub.com" readonly>
+                    <button class="address-dropdown">Go</button>
+                    <button class="go-button">▼</button>
+                </div>
+                <div class="ie-links">
+                    <span class="ie-link">Links »</span>
+                </div>
+            </div>
+
+            <div class="ie-content">
+                <div class="webpage-content msn-homepage">
+                    <div class="msn-header">
+                        <span class="msn-date">Saturday, July 12, 2025</span>
+                        <span class="msn-join">Rewind V2</span>
+                    </div>
+
+                    <div class="msn-top">
+                        <div class="msn-logo">
+                            <img src="images/rwd2.png" alt="MSN Logo">
+                        </div>
+                        <div class="msn-search-bar">
+                            <div class="msn-tabs">
+                                <span class="active">Web</span> | <span>RWD</span> | <span>Images</span> |
+                                <span>News</span> | <span>Maps</span> | <span>Shopping</span> | <span>Video</span>
+                            </div>
+                            <div class="msn-search-input">
+                                <input type="text" placeholder="Search the Web">
+                                <button>Search Web</button>
                             </div>
                         </div>
                     </div>
-                    <div class="right-stuff">
-                        <div class="xp-logo">
-                            <img src="./logo.png" alt="Windows XP Logo"
-                                style="width: 180px; height: 200px; margin-top: -10px; padding-left: 13px;">
+                    <div class="msn-popular-searches">
+                        Popular Searches:
+                        <a href="#">Party at HQ</a> |
+                        <a href="#">5 Big Booms</a>
+                    </div>
+                    <div class="msn-content">
+                        <div class="msn-left">
+                            <h4>Resources</h4>
+                            <ul>
+                                <li><a href="#criteria">Criteria</a></li>
+                                <li><a href="https://forms.hackclub.com/t/rAm1rQwXkaus" target="_blank">Submit</a></li>
+                            </ul>
                         </div>
-                        <div class="date-banner">
-                            <div class="date-content">
-                                <div class="date-title">HAPPENING NOW!!</div>
-                                <div class="date-range">June 29th - July 8th</div>
+                        <div class="msn-main" style=" border: none;">
+                            <div class="msn-feature" style=" border: none;">
+                                <div class="placeholder-img">
+                                    <img src="images/placeholder.png" alt="Rewind V2" height="140px"
+                                        style=" border: none;">
+                                </div>
+                                <p class="caption" style="text-align: center;">Build a Windows XP app; get headphones +
+                                    stickers + artifacts!</p>
+                            </div>
+                            <div class="msn-feature">
+                                <p style="font-size: 16px;">You ship... a Windows XP app:)</p>
+                                <p style="font-size: 16px;">We ship...</p>
+                                <ul>
+                                    <li>stickers @ 2.5 hours</li>
+                                    <li>KTX Pro 1 headphones @ 5 hours</li>
+                                    <li>Porta Pros headphones @ 10 hours</li>
+                                </ul>
+                                <p><em>You can't get both headphones, you have to choose one :)</em></p>
+                            </div>
+
+                            <div class="msn-feature">
+                                <h3>Inspo</h3>
+                                <p style="font-size: 16px;">Need ideas? Here is some inspo you could use</p>
+                                <div class="inspiration-grid">
+                                    <div class="app-example">
+                                        <a href="https://archive.org/details/winamp264" target="_blank">
+                                            <h4 style="font-size: 18px;">Media Player</h4>
+                                            <img src="images/unnamed (1).png" alt="Media Player">
+                                        </a>
+                                    </div>
+                                    <div class="app-example">
+                                        <a href="https://en.wikipedia.org/wiki/Disk_Cleanup" target="_blank">
+                                            <h4 style="font-size: 18px;">System Utilities</h4>
+                                            <img src="images/xp_disk_cleanup.gif" alt="System Utilities">
+                                        </a>
+                                    </div>
+                                    <div class="app-example">
+                                        <a href="@https://www.gametop.com/category/windows-xp-games.html "
+                                            target="_blank">
+                                            <h4 style="font-size: 18px;">Games & Sillies</h4>
+                                            <img src="images/FWk4LNsXoAUOfAV.jpg" alt="Games & Sillies">
+                                        </a>
+                                    </div>
+                                    <div class="app-example">
+                                        <a href="https://notepad-plus-plus.org/downloads/" target="_blank">
+                                            <h4 style="font-size: 18px;">Productivity!</h4>
+                                            <img src="images/6969986_1.png" alt="Productivity Tools">
+                                        </a>
+                                    </div>
+                                </div>
+                                <p><em>Remember: Your app needs to actually work on Windows XP!</em></p>
+                            </div>
+
+                            <div class="msn-feature" id="criteria">
+                                <h3>What counts?</h3>
+                                <ul>
+                                    <li>Any toolkit is fine as long as it has a GUI :)</li>
+                                    <li>Your code must be public on GitHub</li>
+                                    <li>Your app should actually work and be usable on windows XP. I dont
+                                        mind what version of windows XP; just make sure it works.</li>
+                                    <li>The hours listed for the prizes are from your Hackatime hours</li>
+                                </ul>
+                            </div>
+
+                            <div class="msn-feature">
+                                <h3>Very Important Tutorial</h3>
+                                <h4>Installing</h4>
+                                <ul>
+                                    <li>Install VirtualBox (or any VM hypervisor) on your host OS.</li>
+                                    <li>Create a new VM and attach the Windows XP ISO image.</li>
+                                    <li>During setup, enter this product key:
+                                        <code>VCFQD-V9FX9-46WVH-K3CD4-4J3JM</code>
+                                    </li>
+                                </ul>
+
+                                <h4>Getting a Shared Folder</h4>
+                                <ol>
+                                    <li>Inside VirtualBox, open <strong>Devices → Shared Folders →
+                                            Settings…</strong></li>
+                                    <li>Add a folder, tick <em>Auto-mount</em> and <em>Make Permanent</em>.</li>
+                                    <li>In XP, open <code>My Computer</code> and browse to the new drive letter.
+                                    </li>
+                                    <li>If prompted, run <em>VBoxWindowsAdditions.exe</em> to install Guest
+                                        Additions.</li>
+                                    <li>You can now access the shared drive and run your compiled <code>.exe</code>
+                                        files.</li>
+                                </ol>
+
+                                <h4>How do I build a Windows XP app?</h4>
+                                <p>While putting a full tutorial might not be possible, here are some resources that
+                                    might help you get started:</p>
+                                <ul>
+                                    <li><a href="https://learn.microsoft.com/en-us/windows/win32/" target="_blank">MSDN
+                                            Win32 API docs</a></li>
+
+                                    <li><a href="https://web.archive.org/web/20160402103728/http://msdn.microsoft.com/en-us/library/aa383749(v=vs.85).aspx"
+                                            target="_blank">Archived MSDN Library for legacy Windows</a></li>
+                                    <li><a href="https://youtube.com/playlist?list=PLWzp0Bbyy_3i750dsUj7yq4JrPOIUR_NK&si=048uEXM59IojbFFI"
+                                            target="_blank">Win32 API Tutorial Playlist</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="msn-right-top">
+                            <div class="msn-section">
+                                <h4>REWIND!</h4>
+                                <p>Runs from July 12th to August 12th</p>
+                                <p>Be there or be square</p>
+                            </div>
+                            <div class="msn-section">
+                                <h4>Trending Repos</h4>
+                                <ul>
+                                    <li><a href="#">xp-ribbon-ui</a> ★256</li>
+                                    <li><a href="#">clippy.js</a> ★1.2k</li>
+                                    <li><a href="#">winamp-skins</a> ★8k</li>
+                                </ul>
+                            </div>
+                            <div class="msn-section" style="margin-top: 10px; border: none; border-radius: 0px;">
+                                <a href="https://athena.hackclub.com" target="_blank" class="ad-banner">
+                                    <img src="images/join athena.png" alt="Join The Athena Awards">
+
+                                </a>
+                                <a href="https://hackclub.com" target="_blank" class="ad-banner">
+                                    <img src="images/joinhc.png" alt="Join Hack Club">
+
+                                </a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.querySelectorAll('.ie-toolbar-btn').forEach(btn => {
+                        btn.addEventListener('click', function () {
+                            this.style.border = '1px inset #c0c0c0';
+                            setTimeout(() => {
+                                this.style.border = '1px outset #c0c0c0';
+                            }, 100);
+                        });
+                    });
+
+
+
+                    document.querySelectorAll('.ie-content a').forEach(link => {
+                        link.addEventListener('mouseenter', () => {
+                            document.getElementById('statusText').textContent = link.href;
+                        });
+                        link.addEventListener('mouseleave', () => {
+                            document.getElementById('statusText').textContent = 'Done';
+                        });
+                    });
+
+
+                });
+
+
+            </script>
         </div>
 
-        <div class="bottom-bar">
-            <img src="./startbutton.png" alt="Start" class="start-icon">
-            <div class="bar-buttons">
-                <a href="guide.html" class="bar-button" style="text-decoration:none;">Guide</a>
-                <a href="criteria.html" class="bar-button" style="text-decoration:none;">Submission Criteria</a>
-                <a href="https://forms.hackclub.com/t/ns4DVyS26Fus" class="bar-button primary" target="_blank"
-                    style="text-decoration:none;">Submit</a>
-            </div>
-            <div class="system-tray">
-                <span class="time">3:45 PM</span>
-            </div>
-        </div>
-
-        <div class="clippy">
-            <div class="speech-bubble">
-                need help?<br>dm <a href="https://hackclub.slack.com/team/U06EMBJH71S" target="_blank"
-                    style="color: #0000ff; text-decoration: underline;">@lou</a>
-            </div>
-            <div class="clippy-character">
-                <img src="./Clippy.webp" alt="Clippy"
-                    style="width: 50px; height: auto; margin-top: 10px; padding-left: 10px;">
-            </div>
-        </div>
-
-        <div id="guideNotification" class="notification-popup" style="display: none;">
-            <div class="popup-box">
-                <div class="title-bar">
-                    <div class="title-bar-text">You've got mail</div>
-                    <div class="title-bar-controls">
-                        <button aria-label="Help" class="help-button"></button>
-                        <button aria-label="Minimize"></button>
-                        <button aria-label="Maximize"></button>
-                        <button aria-label="Close" onclick="closeNotification()"></button>
-                    </div>
-                </div>
-                <div class="notification-body">
-                    <div class="notification-content">
-                        <img src="./OE1999.webp" alt="Clippy" class="popup-icon">
-                        <div class="notification-text">
-                            <strong>Need help?</strong><br>
-                            You look confused. Want to check out the guide? It'll help you get started :)
-                        </div>
-                    </div>
-                    <div class="popup-buttons">
-                        <button class="xp-button" onclick="dismissNotification()">I'm not confused</button>
-                        <button class="xp-button primary" onclick="openGuide()">Show me the guide!</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <audio id="errorSound" preload="auto">
-        <source src="Microsoft Windows XP Error - Sound Effect (HD).mp3" type="audio/mpeg">
-    </audio>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const closeButton = document.querySelector('.main-box .title-bar-controls button[aria-label="Close"]');
-            if (closeButton) {
-                closeButton.addEventListener('click', function () {
-                    console.log('Close button clicked on main page - no action taken');
-                });
-            }
 
-            setTimeout(function () {
-                if (!sessionStorage.getItem('guideNotificationDismissed')) {
-                    showGuideNotification();
-                }
-            }, 2000);
-
-            if (window.innerWidth > 768) {
-                initWindowDrag();
-            }
-        });
-
-        function initWindowDrag() {
-            const theWindow = document.querySelector('.main-box');
-            const topBar = theWindow.querySelector('.title-bar');
-            let isMoving = false;
-            let grabSpot = { x: 0, y: 0 };
-
-            if (!theWindow.style.left) {
-                const rect = theWindow.getBoundingClientRect();
-                theWindow.style.left = rect.left + 'px';
-                theWindow.style.top = rect.top + 'px';
-                theWindow.style.height = rect.height + 'px';
-                theWindow.style.width = rect.width + 'px';
-                theWindow.style.transform = 'none';
-            }
-
-            topBar.addEventListener('mousedown', function (e) {
-                if (e.target.closest('.title-bar-controls')) {
-                    return;
-                }
-
-                isMoving = true;
-                const rect = theWindow.getBoundingClientRect();
-                grabSpot.x = e.clientX - rect.left;
-                grabSpot.y = e.clientY - rect.top;
-
-                document.addEventListener('mousemove', moveIt);
-                document.addEventListener('mouseup', dropIt);
-
-                e.preventDefault();
-            });
-
-            function moveIt(e) {
-                if (!isMoving) return;
-
-                const newX = e.clientX - grabSpot.x;
-                const newY = e.clientY - grabSpot.y;
-
-                const maxX = window.innerWidth - theWindow.offsetWidth;
-                const maxY = window.innerHeight - theWindow.offsetHeight;
-
-                const constrainedX = Math.max(0, Math.min(newX, maxX));
-                const constrainedY = Math.max(0, Math.min(newY, maxY));
-
-                theWindow.style.left = constrainedX + 'px';
-                theWindow.style.top = constrainedY + 'px';
-            }
-
-            function dropIt() {
-                isMoving = false;
-                document.removeEventListener('mousemove', moveIt);
-                document.removeEventListener('mouseup', dropIt);
-            }
-
-            let isGrowing = false;
-            let whichEdge = null;
-            const resizeHandleSize = 8;
-            const minWidth = 200;
-            const minHeight = 150;
-            let originalMouseX, originalMouseY, originalWidth, originalHeight, originalLeft, originalTop;
-
-            theWindow.addEventListener('mousemove', function (e) {
-                if (isGrowing || isMoving) return;
-
-                const rect = theWindow.getBoundingClientRect();
-                const onLeft = Math.abs(e.clientX - rect.left) < resizeHandleSize;
-                const onRight = Math.abs(e.clientX - rect.right) < resizeHandleSize;
-                const onTop = Math.abs(e.clientY - rect.top) < resizeHandleSize;
-                const onBottom = Math.abs(e.clientY - rect.bottom) < resizeHandleSize;
-
-                let newResizeEdge = null;
-                if (onRight && onBottom) {
-                    theWindow.style.cursor = 'se-resize';
-                    newResizeEdge = 'se';
-                } else if (onLeft && onBottom) {
-                    theWindow.style.cursor = 'sw-resize';
-                    newResizeEdge = 'sw';
-                } else if (onRight && onTop) {
-                    theWindow.style.cursor = 'ne-resize';
-                    newResizeEdge = 'ne';
-                } else if (onLeft && onTop) {
-                    theWindow.style.cursor = 'nw-resize';
-                    newResizeEdge = 'nw';
-                } else if (onRight) {
-                    theWindow.style.cursor = 'e-resize';
-                    newResizeEdge = 'e';
-                } else if (onLeft) {
-                    theWindow.style.cursor = 'w-resize';
-                    newResizeEdge = 'w';
-                } else if (onBottom) {
-                    theWindow.style.cursor = 's-resize';
-                    newResizeEdge = 's';
-                } else if (onTop) {
-                    theWindow.style.cursor = 'n-resize';
-                    newResizeEdge = 'n';
-                } else {
-                    theWindow.style.cursor = 'default';
-                    if (e.target.closest('.title-bar')) {
-                        theWindow.style.cursor = 'move';
-                    }
-                }
-                whichEdge = newResizeEdge;
-            });
-
-            theWindow.addEventListener('mousedown', function (e) {
-                if (whichEdge && !isMoving) {
-                    isGrowing = true;
-
-                    const rect = theWindow.getBoundingClientRect();
-                    originalMouseX = e.clientX;
-                    originalMouseY = e.clientY;
-                    originalWidth = rect.width;
-                    originalHeight = rect.height;
-                    originalLeft = rect.left;
-                    originalTop = rect.top;
-
-                    document.addEventListener('mousemove', growIt);
-                    document.addEventListener('mouseup', stopGrowing);
-                    e.preventDefault();
-                }
-            });
-
-            function growIt(e) {
-                if (!isGrowing) return;
-
-                let newWidth = originalWidth;
-                let newHeight = originalHeight;
-                let newLeft = originalLeft;
-                let newTop = originalTop;
-
-                const dx = e.clientX - originalMouseX;
-                const dy = e.clientY - originalMouseY;
-
-                if (whichEdge.includes('e')) {
-                    newWidth = originalWidth + dx;
-                }
-                if (whichEdge.includes('w')) {
-                    newWidth = originalWidth - dx;
-                    newLeft = originalLeft + dx;
-                }
-                if (whichEdge.includes('s')) {
-                    newHeight = originalHeight + dy;
-                }
-                if (whichEdge.includes('n')) {
-                    newHeight = originalHeight - dy;
-                    newTop = originalTop + dy;
-                }
-
-                if (newWidth < minWidth) {
-                    newWidth = minWidth;
-                    if (whichEdge.includes('w')) {
-                        newLeft = originalLeft + originalWidth - minWidth;
-                    }
-                }
-                if (newHeight < minHeight) {
-                    newHeight = minHeight;
-                    if (whichEdge.includes('n')) {
-                        newTop = originalTop + originalHeight - minHeight;
-                    }
-                }
-
-                theWindow.style.width = newWidth + 'px';
-                theWindow.style.height = newHeight + 'px';
-                theWindow.style.left = newLeft + 'px';
-                theWindow.style.top = newTop + 'px';
-            }
-
-            function stopGrowing() {
-                isGrowing = false;
-                document.removeEventListener('mousemove', growIt);
-                document.removeEventListener('mouseup', stopGrowing);
-            }
-        }
-
-        function showGuideNotification() {
-            const notification = document.getElementById('guideNotification');
-            notification.style.display = 'flex';
-
-            const errorSound = document.getElementById('errorSound');
-            errorSound.currentTime = 0;
-            errorSound.play().catch(e => console.log('Audio play failed:', e));
-        }
-
-        function closeNotification() {
-            const notification = document.getElementById('guideNotification');
-            notification.style.display = 'none';
-            sessionStorage.setItem('guideNotificationDismissed', 'true');
-        }
-
-        function dismissNotification() {
-            closeNotification();
-        }
-
-        function openGuide() {
-            sessionStorage.setItem('guideNotificationDismissed', 'true');
-            window.location.href = 'guide.html';
-        }
-
-        document.getElementById('guideNotification').addEventListener('click', function (e) {
-            if (e.target === this) {
-                closeNotification();
-            }
-        });
-    </script>
 </body>
 
 </html>
